@@ -3,14 +3,21 @@ import styled from "styled-components"
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import axios from "axios"
+import { ThreeDots } from 'react-loader-spinner'
+import { useContext } from 'react';
+import { LogInContext } from "../../components/LogInContext"
 
-export default function LogInPage(props) {
-    const {email, setEmail, password, setPassword} = props;
-    const [disabledValue, setDisabledValue] = useState(false)
-    
+
+export default function LogInPage() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [disabledValue, setDisabledValue] = useState(false);
+    const navigate = useNavigate();
+    const {setLogInStatus} = useContext(LogInContext);
+
     const logInInfo = {
         email: email,
-	    password: password
+        password: password
     }
 
     const config = {
@@ -24,16 +31,25 @@ export default function LogInPage(props) {
             <img src={logo} />
             <form onSubmit={logInCheck} disabled={disabledValue}>
                 <FormContainer>
-                    <input type="email" required placeholder="email" value={email}  onChange={e => setEmail(e.target.value)}/>
-                    <input type="password" required placeholder="senha" value={password} onChange={e => setPassword(e.target.value)}/>
-                    <button type="submit">Entrar</button>
+                    <input type="email" required placeholder="email" value={email} onChange={e => setEmail(e.target.value)} />
+                    <input type="password" required placeholder="senha" value={password} onChange={e => setPassword(e.target.value)} />
+                    <button opacity={disabledValue == false ? 1 : 0.7} type="submit">
+                        {disabledValue == true ? <ThreeDots
+                            height="80"
+                            width="80"
+                            radius="9"
+                            color="#ffffff"
+                            ariaLabel="three-dots-loading"
+                            visible={true}
+                        /> : 'Entrar'}
+                    </button>
                 </FormContainer>
             </form>
             <Link to={"/cadastro"} style={{ textDecoration: 'none' }}>
                 <p>Não tem uma conta? Cadastre-se!</p>
             </Link>
-                
-            
+
+
         </SCLogInPage>
 
     )
@@ -41,12 +57,15 @@ export default function LogInPage(props) {
     function logInCheck(event) {
         event.preventDefault();
         setDisabledValue(true)
-        console.log(logInInfo);
         const promise = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login', logInInfo)
         promise.then(p => {
-            setDisabledValue(false)
+            setLogInStatus(p.data);
+            navigate('/habitos');
         })
-        promise.catch(p => console.log(p.response))
+        promise.catch(p => {
+            alert(p.message)
+            setDisabledValue(false);
+        })
     };
 };
 
@@ -102,9 +121,14 @@ const FormContainer = styled.div`
         color: #DBDBDB;
     }
     button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
         background-color: #52B6FF;
         box-shadow: none;
         border: none;
+        opacity: ${props => props.opacity};
 
         width: 303px;
         height: 45px;

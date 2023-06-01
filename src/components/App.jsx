@@ -1,29 +1,23 @@
 import SignInPage from "../pages/SignInPage/SignInPage"
 import LogInPage from "../pages/LogInPage/LogInPage"
+import HabitsPage from "../pages/HabitsPage/HabitsPage"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { LogInContext } from "./LogInContext"
 import { useState } from "react"
 
 export default function App() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [logInStatus, setLogInStatus] = useState({}); 
 
   return (
     <>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LogInPage email={email}
-            setEmail={setEmail}
-            password={password}
-            setPassword={setPassword}
-          />}>
-          </Route>
-          <Route path="/cadastro" element={<SignInPage email={email}
-            setEmail={setEmail}
-            password={password}
-            setPassword={setPassword}
-          />}>
-          </Route>
-        </Routes>
+        <LogInContext.Provider value={{logInStatus, setLogInStatus}}>
+          <Routes>
+            <Route path="/" element={<LogInPage />} />
+            <Route path="/cadastro" element={<SignInPage />} />
+            <Route path="/habitos" element={<HabitsPage />} />
+          </Routes>
+        </LogInContext.Provider>
       </BrowserRouter>
     </>
   )

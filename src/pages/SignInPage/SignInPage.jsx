@@ -3,9 +3,11 @@ import styled from "styled-components"
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react";
 import axios from "axios";
+import { ThreeDots } from 'react-loader-spinner'
 
-export default function SignInPage(props) {
-    const {email, setEmail, password, setPassword} = props;
+export default function SignInPage() {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
     const [userName, setUserName] = useState('');
     const [photo, setPhoto] = useState('')
     const [disabledValue, setDisabledValue] = useState(false)
@@ -13,9 +15,9 @@ export default function SignInPage(props) {
 
     const signInInfo = {
         email: email,
-	    name: userName,
-	    image: photo,
-	    password: password
+        name: userName,
+        image: photo,
+        password: password
     }
 
     const config = {
@@ -29,16 +31,25 @@ export default function SignInPage(props) {
             <img src={logo} alt="trackit_logo" />
             <form onSubmit={signInCheck} disabled={disabledValue}>
                 <FormContainer>
-                    <input placeholder="email" type="email"  required value={email}  onChange={e => setEmail(e.target.value)}/>
-                    <input placeholder="senha" type="password" required value={password} onChange={e => setPassword(e.target.value)}/>
-                    <input placeholder="nome" type="text" required value={userName} onChange={e => setUserName(e.target.value)}/>
-                    <input placeholder="foto" type="url"  required value={photo} onChange={e => setPhoto(e.target.value)}/>
-                    <button type="submit">Cadastrar</button>
+                    <input placeholder="email" type="email" required value={email} onChange={e => setEmail(e.target.value)} />
+                    <input placeholder="senha" type="password" required value={password} onChange={e => setPassword(e.target.value)} />
+                    <input placeholder="nome" type="text" required value={userName} onChange={e => setUserName(e.target.value)} />
+                    <input placeholder="foto" type="url" required value={photo} onChange={e => setPhoto(e.target.value)} />
+                    <button type="submit" opacity={disabledValue == false ? 1 : 0.7}>
+                        {disabledValue == true ? <ThreeDots
+                            height="80"
+                            width="80"
+                            radius="9"
+                            color="#ffffff"
+                            ariaLabel="three-dots-loading"
+                            visible={true}
+                        /> : 'Cadastrar'}
+                    </button>
                 </FormContainer>
-                <Link to={'/'} style={{ textDecoration: 'none' }}> 
+                <Link to={'/'} style={{ textDecoration: 'none' }}>
                     <p>Já tem uma conta? Faça login!</p>
                 </Link>
-                
+
             </form>
 
         </SCSignIn>
@@ -114,6 +125,7 @@ const FormContainer = styled.div`
         background-color: #52B6FF;
         box-shadow: none;
         border: none;
+        opacity: ${props => props.opacity};
 
         width: 303px;
         height: 45px;
