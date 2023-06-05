@@ -31,9 +31,9 @@ export default function LogInPage() {
             <img src={logo} />
             <form onSubmit={logInCheck} disabled={disabledValue}>
                 <FormContainer>
-                    <input type="email" required placeholder="email" value={email} onChange={e => setEmail(e.target.value)} />
-                    <input type="password" required placeholder="senha" value={password} onChange={e => setPassword(e.target.value)} />
-                    <button opacity={disabledValue == false ? 1 : 0.7} type="submit">
+                    <input data-test="email-input" type="email" required placeholder="email" value={email} onChange={e => setEmail(e.target.value)} />
+                    <input data-test="password-input" type="password" required placeholder="senha" value={password} onChange={e => setPassword(e.target.value)} />
+                    <button data-test="login-btn" opacity={disabledValue == false ? 1 : 0.7} type="submit">
                         {disabledValue == true ? <ThreeDots
                             height="80"
                             width="80"
@@ -45,7 +45,7 @@ export default function LogInPage() {
                     </button>
                 </FormContainer>
             </form>
-            <Link to={"/cadastro"} style={{ textDecoration: 'none' }}>
+            <Link data-test="signup-link" to={"/cadastro"} style={{ textDecoration: 'none' }}>
                 <p>Não tem uma conta? Cadastre-se!</p>
             </Link>
 
@@ -60,7 +60,7 @@ export default function LogInPage() {
         const promise = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login', logInInfo)
         promise.then(p => {
             setLogInStatus(p.data);
-            navigate('/habitos');
+            navigate('/hoje');
         })
         promise.catch(p => {
             alert(p.message)

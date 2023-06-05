@@ -31,11 +31,11 @@ export default function SignInPage() {
             <img src={logo} alt="trackit_logo" />
             <form onSubmit={signInCheck} disabled={disabledValue}>
                 <FormContainer>
-                    <input placeholder="email" type="email" required value={email} onChange={e => setEmail(e.target.value)} />
-                    <input placeholder="senha" type="password" required value={password} onChange={e => setPassword(e.target.value)} />
-                    <input placeholder="nome" type="text" required value={userName} onChange={e => setUserName(e.target.value)} />
-                    <input placeholder="foto" type="url" required value={photo} onChange={e => setPhoto(e.target.value)} />
-                    <button type="submit" opacity={disabledValue == false ? 1 : 0.7}>
+                    <input data-test="email-input" placeholder="email" type="email" required value={email} onChange={e => setEmail(e.target.value)} />
+                    <input data-test="password-input" placeholder="senha" type="password" required value={password} onChange={e => setPassword(e.target.value)} />
+                    <input data-test="user-name-input" placeholder="nome" type="text" required value={userName} onChange={e => setUserName(e.target.value)} />
+                    <input data-test="user-image-input" placeholder="foto" type="url" required value={photo} onChange={e => setPhoto(e.target.value)} />
+                    <button data-test="signup-btn" type="submit" opacity={disabledValue == false ? 1 : 0.7}>
                         {disabledValue == true ? <ThreeDots
                             height="80"
                             width="80"
@@ -46,7 +46,7 @@ export default function SignInPage() {
                         /> : 'Cadastrar'}
                     </button>
                 </FormContainer>
-                <Link to={'/'} style={{ textDecoration: 'none' }}>
+                <Link data-test="login-link" to={'/'} style={{ textDecoration: 'none' }}>
                     <p>Já tem uma conta? Faça login!</p>
                 </Link>
 
@@ -60,7 +60,6 @@ export default function SignInPage() {
         const promise = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up', signInInfo, config)
         setDisabledValue(true)
         promise.then(p => {
-            console.log(p.data);
             navigate('/')
         })
         promise.catch(p => {
@@ -122,6 +121,10 @@ const FormContainer = styled.div`
         color: #DBDBDB;
     }
     button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
         background-color: #52B6FF;
         box-shadow: none;
         border: none;
